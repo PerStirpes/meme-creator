@@ -1,13 +1,13 @@
-var express = require("express");
-var app = express();
-var cors = require('cors');
-var request = require("request");
-var bodyParser = require("body-parser");
-var userRoutes = require("./routes/users");
-var authRoutes = require("./routes/auth");
-var memeRoutes = require("./routes/memes");
-var authMiddleware = require("./middleware/auth");
-var db = require("./models");
+const express = require("express");
+const app = express();
+const cors = require('cors');
+const request = require("request");
+const bodyParser = require("body-parser");
+const userRoutes = require("./routes/users");
+const authRoutes = require("./routes/auth");
+const memeRoutes = require("./routes/memes");
+const authMiddleware = require("./middleware/auth");
+const db = require("./models");
 
 if (process.env.NODE_ENV !== 'production') {
   require("dotenv").config()
@@ -17,7 +17,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-app.get("/", function(req,res){
+app.get("/", (req,res) => {
   res.send("start with /api/users");
 });
 
@@ -27,7 +27,7 @@ app.use('/api/users', authMiddleware.loginRequired, userRoutes);
 
 app.use('/api/auth', authRoutes);
 
-app.get('/memes/options', function(req,res){
+app.get('/memes/options', (req,res) => {
   request.get("https://api.imgflip.com/get_memes",
     function(error, response, body) {
       if (error) {
@@ -39,8 +39,8 @@ app.get('/memes/options', function(req,res){
   );
 });
 
-app.get('/memes', function(req, res, next) {
-  db.Meme.find({}, function(err, memes) {
+app.get('/memes', (req, res, next) => {
+  db.Meme.find({}, (err, memes) => {
     if (err) {
       next(err);
     } else {
@@ -50,10 +50,10 @@ app.get('/memes', function(req, res, next) {
   });
 });
 
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   res.send(err);
 });
 
-app.listen(3000, function(){
+app.listen(3000, () => {
   console.log("Server is listening on port 3000");
 });
