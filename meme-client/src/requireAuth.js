@@ -1,25 +1,22 @@
-import React, {Component} from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 
 export default function(ComposedComponent) {
-
   class Authenticate extends Component {
     comonentWillMount() {
       if (!this.props.isAuthenticated) {
-        this.props.history.push('/login');
+        this.props.history.push('/login')
       }
     }
 
     componentWillUpdate(nextProps) {
       if (!nextProps.isAuthenticated) {
-        this.props.history.push('/');
+        this.props.history.push('/')
       }
     }
 
     render() {
-      return (
-        <ComposedComponent {...this.props} />
-      );
+      return <ComposedComponent {...this.props} />
     }
   }
 
@@ -30,8 +27,9 @@ export default function(ComposedComponent) {
   function mapStateToProps(state) {
     return {
       isAuthenticated: state.isAuthenticated
-    };
+    }
   }
 
-  return connect(mapStateToProps)(Authenticate);
+  return connect(mapStateToProps)(Authenticate)
 }
+
