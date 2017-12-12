@@ -4,7 +4,7 @@ var router = express.Router({mergeParams: true});
 var db = require("../models")
 var auth = require('../middleware/auth')
 
-router.get('/', function(req,res){
+router.get('/', (req,res) => {
   db.User.findById(req.params.id)
     .populate('memes')
     .then(function(user){
