@@ -1,41 +1,44 @@
-var mongoose = require("mongoose");
-var bcrypt = require("bcrypt");
+const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 
-var userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    memes: [{
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  memes: [
+    {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Meme'
-    }]
-});
+    }
+  ]
+})
 
-userSchema.pre('save', function(next){
-    var user = this;
+userSchema.pre('save', next => {
+  const user = this
 
-    if (!user.isModified('password')) return next();
+  if (!user.isModified('password')) return next()
 
-    bcrypt.hash(user.password, 10).then(function(hashedPassword) {
-        user.password = hashedPassword
-        next();
-    }, function(err){
-        return next(err)
-    })
-});
+  bcrypt.hash(user.password, 10).then(
+    hashedPassword => {
+      user.password = hashedPassword
+      next()
+    },
+    err => next(err)
+  )
+})
 
-userSchema.methods.comparePassword = function(candidatePassword, next) {
-    bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-        if(err) return next(err);
-        next(null, isMatch);
-    });
-};
+userSchema.methods.comparePassword = (candidatePassword, next) => {
+  bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
+    if (err) return next(err)
+    next(null, isMatch)
+  })
+}
 
-var User = mongoose.model('User', userSchema);
-module.exports = User;
+const User = mongoose.model('User', userSchema)
+module.exports = User

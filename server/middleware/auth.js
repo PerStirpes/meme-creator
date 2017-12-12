@@ -1,9 +1,10 @@
 require('dotenv').load()
-var jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 
-exports.loginRequired = function(req, res, next) {
+exports.loginRequired = (req, res, next) => {
   try {
-    var token = req.headers.authorization.split(' ')[1]
+    const token = req.headers.authorization.split(' ')[1]
+
     jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
       if (decoded) {
         next()
@@ -16,10 +17,11 @@ exports.loginRequired = function(req, res, next) {
   }
 }
 
-exports.ensureCorrectUser = function(req, res, next) {
+exports.ensureCorrectUser = (req, res, next) => {
   try {
-    var token = req.headers.authorization.split(' ')[1]
-    jwt.verify(token, process.env.SECRET_KEY, function(err, decoded) {
+    const token = req.headers.authorization.split(' ')[1]
+
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
       if (decoded.user_id === req.params.id) {
         next()
       } else {
